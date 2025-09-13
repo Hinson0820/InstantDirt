@@ -18,9 +18,9 @@ public class BlockEventHandler {
 
     /**
      * Fired when an entity places a block.
-     * This is an instance method, called on the registered instance of this class.
-     * It checks if an opaque block was placed on top of grass or mycelium
-     * and, if so, converts the block below to dirt.
+     * This method now contains two checks:
+     * 1. If an opaque block is placed on grass/mycelium, the block below turns to dirt.
+     * 2. If grass/mycelium is placed under an opaque block, the newly placed block turns to dirt.
      *
      * @param event The block placement event.
      */
@@ -36,7 +36,8 @@ public class BlockEventHandler {
 
         BlockState placedState = level.getBlockState(pos);
 
-        // Check if the placed block is opaque and renders as a full cube.
+        // --- Check 1: Top-Down Logic (Opaque block placed on top) ---
+        // This handles the case where a player builds ON TOP of grass.
         if (placedState.isSolidRender(level, pos)) {
             BlockPos posBelow = pos.below();
             BlockState stateBelow = level.getBlockState(posBelow);
@@ -44,8 +45,20 @@ public class BlockEventHandler {
             // Check if the block below is either grass or mycelium.
             if (stateBelow.is(Blocks.GRASS_BLOCK) || stateBelow.is(Blocks.MYCELIUM)) {
                 // Replace the grass/mycelium block with dirt.
-                // The '3' flag ensures the change is sent to clients and updates neighbors.
                 level.setBlock(posBelow, Blocks.DIRT.defaultBlockState(), 3);
+            }
+        }
+
+        // --- Check 2: Bottom-Up Logic (Grass/Mycelium placed below) ---
+        // This handles the case where a player places grass UNDER an existing structure.
+        if (placedState.is(Blocks.GRASS_BLOCK) || placedState.is(Blocks.MYCELIUM)) {
+            BlockPos posAbove = pos.above();
+            BlockState stateAbove = level.getBlockState(posAbove);
+
+            // Check if the block above is opaque.
+            if (stateAbove.isSolidRender(level, posAbove)) {
+                // Replace the newly placed grass/mycelium block with dirt.
+                level.setBlock(pos, Blocks.DIRT.defaultBlockState(), 3);
             }
         }
     }
