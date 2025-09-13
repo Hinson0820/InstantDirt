@@ -4,32 +4,35 @@
 [![Mod Loader: NeoForge](https://img.shields.io/badge/Mod%20Loader-NeoForge-blue.svg)](https://neoforged.net/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A simple, lightweight, server-side Minecraft mod that brings a small touch of realism and convenience to your building and landscaping projects.
+InstantDirt is a lightweight, server-side Minecraft mod that introduces a more intuitive and realistic "sunlight" mechanic for grass and mycelium blocks.
 
 ## Features
 
-The core functionality is simple and focused: when an opaque block is placed on top of grass or mycelium, they instantly convert to dirt.
+This mod enhances a single vanilla mechanic: Grass and Mycelium will instantly turn to Dirt when they are deprived of light. The mod is smart about what "deprived of light" means, checking for both the block's shape and its material properties.
 
--   **Grass Blocks** placed under a solid block will turn into a `Dirt` block.
--   **Mycelium Blocks** placed under a solid block will turn into a `Dirt` block.
+This logic applies in two scenarios:
+-   When you **cover** an existing grass/mycelium block.
+-   When you **place** a grass/mycelium block under an existing cover.
 
-This mimics the effect of cutting off sunlight, providing a quick and intuitive way to manage grassy areas without needing to use a shovel.
+**Examples:**
+-   ✅ Placing **solid blocks** (Cobblestone, Planks) on grass turns it to dirt.
+-   ✅ Placing **right-side-up Stairs or bottom Slabs** on grass turns it to dirt.
+-   ❌ Placing **upside-down Stairs or top Slabs** on grass does **not** affect it.
+-   ❌ Placing **transparent blocks** (Glass) on grass does **not** affect it.
+-   ❌ Placing **partial blocks with gaps** (Chests, Anvils, Fences) on grass does **not** affect it.
 
 ## Key Characteristics
 
 ### ✅ Lightweight and Performant
-This mod contains minimal, highly-optimized code. It has virtually no impact on server performance.
+The mod's logic is highly efficient and only runs during block placement events, resulting in a negligible impact on server performance.
 
 ### ✅ Server-Side Only
-This is a huge advantage for server administrators. **Players do not need to install this mod to join a server that has it.** It works entirely on the server, and vanilla clients will see the changes seamlessly.
+This is a key feature for server administrators. **Players do not need to install this mod to join a server that has it.** All logic is handled by the server, and vanilla clients will see the results seamlessly.
 
 ### ✅ Vanilla Feel
-InstantDirt adds no new blocks, items, or textures. It simply alters a vanilla behavior in a way that feels natural and intuitive to the core game.
+InstantDirt adds no new blocks, items, or textures. Its change is designed to feel like a logical extension of the base game—the way grass and sunlight *should* have worked all along.
 
-### ✅ Simplifies Building
-Quickly clear grassy patches for foundations or create dirt paths without having to break and replace blocks manually.
-
-## Installation (For Players and Server Admins)
+## Installation
 
 1.  Ensure you have **NeoForge** for Minecraft 1.21.1 installed.
 2.  Download the latest `.jar` file from the [GitHub Releases page](https://github.com/hinson820/InstantDirt/releases).
@@ -37,8 +40,6 @@ Quickly clear grassy patches for foundations or create dirt paths without having
 4.  Start the game or server. That's it!
 
 ## Building From Source (For Developers)
-
-If you want to compile the mod yourself, follow these steps:
 
 1.  **Prerequisites:**
     -   JDK (Java Development Kit) 21 is required.
