@@ -12,25 +12,24 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 
 /**
  * Handles game events related to block interactions.
- * This class listens for block placement events to implement the core mod logic.
+ * An instance of this class is manually registered to the event bus.
  */
-@EventBusSubscriber(modid = InstantDirt.MODID)
 public class BlockEventHandler {
 
     /**
      * Fired when an entity places a block.
-     * This method checks if an opaque block was placed on top of grass or mycelium
+     * This is an instance method, called on the registered instance of this class.
+     * It checks if an opaque block was placed on top of grass or mycelium
      * and, if so, converts the block below to dirt.
      *
      * @param event The block placement event.
      */
     @SubscribeEvent
-    public static void onBlockPlace(final BlockEvent.EntityPlaceEvent event) {
+    public void onBlockPlace(final BlockEvent.EntityPlaceEvent event) {
         LevelAccessor levelAccessor = event.getLevel();
         BlockPos pos = event.getPos();
 
         // Guard clause: Ensure we are on the logical server before proceeding.
-        // The cast to (Level) is safe here because EntityPlaceEvent only happens in a Level.
         if (!(levelAccessor instanceof Level level) || level.isClientSide()) {
             return;
         }
@@ -38,7 +37,6 @@ public class BlockEventHandler {
         BlockState placedState = level.getBlockState(pos);
 
         // Check if the placed block is opaque and renders as a full cube.
-        // This is our proxy for "blocking sunlight".
         if (placedState.isSolidRender(level, pos)) {
             BlockPos posBelow = pos.below();
             BlockState stateBelow = level.getBlockState(posBelow);

@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 /**
  * The main mod class for InstantDirt.
  * This class is the entry point for the mod and is responsible for
- * registering event listeners.
+ * registering event listeners to the main NeoForge event bus.
  */
 @Mod(InstantDirt.MODID)
 public class InstantDirt {
@@ -31,10 +31,9 @@ public class InstantDirt {
      * @param modEventBus The event bus for this mod, provided by NeoForge.
      */
     public InstantDirt(IEventBus modEventBus) {
-        // Register our event handler to the main NeoForge event bus.
-        // This allows our handler to listen for game-wide events.
+        // Manually register an instance of our event handler to the main event bus.
         NeoForge.EVENT_BUS.register(new BlockEventHandler());
 
-        LOGGER.info("InstantDirt loaded and ready to smother some grass!");
+        LOGGER.info("InstantDirt loaded and event handler registered.");
     }
 }
